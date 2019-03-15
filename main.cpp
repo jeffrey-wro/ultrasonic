@@ -4,9 +4,14 @@
 #include <unistd.h>
 #include "DIO.h"
 #include "MyRio.h"
-#include "Ultrasonic.h"
+#include "string"
 
 #include <sys/time.h>
+
+#include "Ultrasonic.h"
+
+
+void printDistance(char* msg, int distance);
 
 
 int main(int argc, char **argv)
@@ -21,20 +26,21 @@ int main(int argc, char **argv)
         return status;
     }
 
+    printf("Starting");
+    fflush(stdout);
 
     int distance;
 
     while(1) {
 
-        distance = ultrasonic.getDistance();
+        distance = ultrasonic.getDistance(Ultrasonic::FRONT_RIGHT);
 
-        printf("Distance = ");
-        if (distance >= 400 || distance <= 2){
-            printf("Out of range\n");
-        } else {
-            printf("%d", distance);
-            printf(" cm\n");
-        }
+        printDistance((char *)"Right distance = ", distance);
+
+        distance = ultrasonic.getDistance(Ultrasonic::FRONT_LEFT);
+
+        printDistance((char *)"Left distance = ", distance);
+
         usleep(100000);
     }
 
@@ -42,4 +48,15 @@ int main(int argc, char **argv)
 
     
     return status;
+}
+
+void printDistance(char* msg, int distance){
+    printf(msg);
+    if (distance >= 400 || distance <= 2){
+        printf("Out of range\n");
+    } else {
+        printf("%d", distance);
+        printf(" cm\n");
+    }
+    fflush(stdout);
 }
