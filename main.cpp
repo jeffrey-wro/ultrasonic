@@ -11,7 +11,7 @@
 #include "Ultrasonic.h"
 
 
-void printDistance(char* msg, int distance);
+void printDistance(char* msg, float distance);
 
 
 int main(int argc, char **argv)
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     printf("Starting");
     fflush(stdout);
 
-    int distance;
+    float distance;
 
     while(1) {
 
@@ -50,12 +50,12 @@ int main(int argc, char **argv)
     return status;
 }
 
-void printDistance(char* msg, int distance){
+void printDistance(char* msg, float distance){
     printf(msg);
     if (distance >= 400 || distance <= 2){
         printf("Out of range\n");
     } else {
-        printf("%d", distance);
+        printf("%f", distance);
         printf(" cm\n");
     }
     fflush(stdout);

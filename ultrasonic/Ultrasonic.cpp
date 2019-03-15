@@ -21,10 +21,10 @@ Ultrasonic::Ultrasonic(){
 
 
 
-int Ultrasonic::getDistance(Sensor sensor){
+float Ultrasonic::getDistance(Sensor sensor){
 
     int duration;
-    int distance;
+    float distance;
 
     struct timeval t1;
     struct timeval t2;

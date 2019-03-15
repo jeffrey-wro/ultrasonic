@@ -14,7 +14,7 @@ public:
     } Sensor;
 
 	Ultrasonic();
-	int getDistance(Sensor sensor);
+	float getDistance(Sensor sensor);
 
     typedef struct {
        	NiFpga_Bool dio_B0;
