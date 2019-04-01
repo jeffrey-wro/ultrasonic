@@ -13,6 +13,9 @@ public:
     	FRONT_RIGHT
     } Sensor;
 
+    #define MAX_DISTANCE 400
+    #define MIN_DISTANCE 2
+
 	Ultrasonic();
 	float getDistance(Sensor sensor);
 
