@@ -1,5 +1,7 @@
 # ultrasonic
-This program get the distance from ultrasonic sensor every 100ms
+Ultrasonic library to get distance from ultrasonic sensor
+
+The test file get the distance from ultrasonic sensor every 100ms
 
 After Installing the complier use the make file to compile it
 
