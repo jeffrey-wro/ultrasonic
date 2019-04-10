@@ -1,9 +1,6 @@
 #ifndef ULTRASONIC_H
 #define ULTRASONIC_H
 
-#include <vector>
-#include "DIO.h"
-#include "MyRio.h"
 
 class Ultrasonic
 {
@@ -13,32 +10,33 @@ public:
     	FRONT_RIGHT
     } Sensor;
 
-    #define MAX_DISTANCE 400
-    #define MIN_DISTANCE 2
+	static constexpr double MAX_DISTANCE = 400;
+	static constexpr double MIN_DISTANCE = 2;
 
 	Ultrasonic();
 	float getDistance(Sensor sensor);
 
-    typedef struct {
-       	NiFpga_Bool dio_B0;
-	    NiFpga_Bool dio_B1;
-
-	    MyRio_Dio B0;
-	    MyRio_Dio B1;
-    }SensorData;
-
 private:
+    typedef struct {
+       	NiFpga_Bool dio_TRIGGER;
+	    NiFpga_Bool dio_ECHO;
+
+	    MyRio_Dio TRIGGER;
+	    MyRio_Dio ECHO;
+    }SensorData;
 
 	SensorData sensorData[2] = {
 		{
 			0, 0,
 			{
+				//PORT B PIN 2
 				DIOB_70DIR,
 				DIOB_70OUT,
 				DIOB_70IN,
 				2
 			},
 			{
+				//PORT B PIN 3
 				DIOB_70DIR,
 				DIOB_70OUT,
 				DIOB_70IN,
@@ -48,12 +46,14 @@ private:
 		{
 			0, 0,
 			{
+				//PORT B PIN 0
 				DIOB_70DIR,
 				DIOB_70OUT,
 				DIOB_70IN,
 				0
 			},
 			{
+				//PORT B PIN 1
 				DIOB_70DIR,
 				DIOB_70OUT,
 				DIOB_70IN,

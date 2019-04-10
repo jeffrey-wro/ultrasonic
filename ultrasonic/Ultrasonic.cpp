@@ -15,12 +15,13 @@ using namespace std;
 
 Ultrasonic::Ultrasonic(){
 
-
-
 }
 
 
-//return distance in from ultrasonic if its out of range return -1
+/*
+ * Return distance in cm from ultrasonic sensor
+ * If measurement is out of range or invalid it return -1
+ */
 float Ultrasonic::getDistance(Sensor sensor){
 
     int duration;
@@ -29,17 +30,22 @@ float Ultrasonic::getDistance(Sensor sensor){
     struct timeval t1;
     struct timeval t2;
 
-
-    sensorData[sensor].dio_B0 = 0;
-    Dio_WriteBit(&(sensorData[sensor].B0), sensorData[sensor].dio_B0);
+    //make sure trigger is low
+    sensorData[sensor].dio_TRIGGER = 0;
+    Dio_WriteBit(&(sensorData[sensor].TRIGGER), sensorData[sensor].dio_TRIGGER);
     usleep(2);
-    sensorData[sensor].dio_B0 = 1;
-    Dio_WriteBit(&(sensorData[sensor].B0), sensorData[sensor].dio_B0);
-    usleep(10);
-    sensorData[sensor].dio_B0 = 0;
-    Dio_WriteBit(&(sensorData[sensor].B0), sensorData[sensor].dio_B0);
 
-    while(Dio_ReadBit(&(sensorData[sensor].B1)) == 0){
+    //send 10 microsecond pulse to trigger
+    sensorData[sensor].dio_TRIGGER = 1;
+    Dio_WriteBit(&(sensorData[sensor].TRIGGER), sensorData[sensor].dio_TRIGGER);
+    usleep(10);
+    sensorData[sensor].dio_TRIGGER = 0;
+    Dio_WriteBit(&(sensorData[sensor].TRIGGER), sensorData[sensor].dio_TRIGGER);
+
+    //wait for echo pulse to go high
+    while(Dio_ReadBit(&(sensorData[sensor].ECHO)) == 0){
+
+        //check for usec overflow
         gettimeofday(&t1, NULL);
         if(t1.tv_usec > 999990){
             printf("Invalid 1");
@@ -48,18 +54,21 @@ float Ultrasonic::getDistance(Sensor sensor){
         }
     }
 
+
     gettimeofday(&t1, NULL);
 
+    //wait for echo pulse to go low
+    while(Dio_ReadBit(&(sensorData[sensor].ECHO)) != 0){
 
-    while(Dio_ReadBit(&(sensorData[sensor].B1)) != 0){
+        //check for usec overflow
         gettimeofday(&t2, NULL);
-
         if(t2.tv_usec > 999990){
             printf("Invalid 2");
             fflush(stdout);
             return -1;
         }
     }
+
     gettimeofday(&t2, NULL);
 
     duration = t2.tv_usec-t1.tv_usec;
